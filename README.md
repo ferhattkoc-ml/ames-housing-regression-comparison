@@ -1,107 +1,156 @@
-# Ames Housing – Regression Model Comparison
+<div align="center">
 
-This project compares **Linear Regression**, **Ridge**, **Lasso**, and **ElasticNet**
-models on the Ames Housing dataset to evaluate the impact of regularization
-techniques on high-dimensional and multicollinear data.
+# 🏠 Ames Housing – Regression Model Comparison
 
-The main objective is to analyze how different regularization approaches
-affect prediction performance and model stability in housing price prediction.
+**Linear, Ridge, Lasso & ElasticNet Karşılaştırması**
 
----
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
+[![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org)
+[![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge&logo=python&logoColor=white)](https://matplotlib.org)
+[![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)](https://jupyter.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-## Dataset
-- **Ames Housing Dataset**
-- Target variable: **SalePrice**
-- Contains both numerical and categorical features
-- High dimensionality after one-hot encoding
+**🏆 Ridge Regression — En Yüksek R², En Düşük RMSE**
 
-> The dataset is not included in the repository due to size constraints.
-> It can be obtained from the Kaggle *House Prices: Advanced Regression Techniques* competition.
+</div>
 
 ---
 
-## Methodology
+## 📌 Proje Hakkında
 
-### Data Preprocessing
-- **Missing Value Handling**
-  - Categorical variables filled with `"None"`
-  - Structural numerical missing values (e.g. garage, basement related features) filled with `0`
-  - Remaining numerical missing values filled with **median**
-- **Categorical Encoding**
-  - One-hot encoding applied using `get_dummies`
-- **Feature Scaling**
-  - `StandardScaler` applied **only to numerical features**
-  - Dummy (0/1) variables were not scaled
-- **Data Splitting**
-  - Train-test split applied before modeling
-
-### Model Training
-- Hyperparameter tuning performed using **GridSearchCV**
-- Cross-validation used to ensure robust model comparison
+Bu proje, **Ames Housing** veri seti üzerinde **Linear Regression, Ridge, Lasso ve ElasticNet** modellerini karşılaştırarak regularizasyon tekniklerinin yüksek boyutlu ve çoklu doğrusal bağlantılı (multicollinear) verilerdeki etkisini analiz etmektedir.
 
 ---
 
-## Models Compared
-- **Linear Regression**
-- **Ridge Regression** (L2 Regularization)
-- **Lasso Regression** (L1 Regularization)
-- **ElasticNet Regression** (L1 + L2 Regularization)
+## 📊 Veri Seti
+
+| Özellik | Değer |
+|---------|-------|
+| **Kaynak** | Ames Housing Dataset (Kaggle) |
+| **Hedef Değişken** | `SalePrice` (Ev Fiyatı) |
+| **Özellikler** | Sayısal + Kategorik (one-hot sonrası yüksek boyut) |
+| **Not** | Veri seti boyut nedeniyle repo'ya dahil edilmemiştir. Kaggle'dan indirilebilir. |
 
 ---
 
-## Evaluation Metrics
-- **R² Score**
-- **Mean Squared Error (MSE)**
-- **Root Mean Squared Error (RMSE)**
+## 🔧 Metodoloji
 
-These metrics were used to evaluate both predictive accuracy and error magnitude.
+```
+Ham Veri → Eksik Veri İşleme → One-Hot Encoding → StandardScaler → GridSearchCV → Model Karşılaştırması → Değerlendirme
+```
 
----
+### 1️⃣ Veri Ön İşleme
 
-## Results
-- **Ridge Regression** achieved the **highest R² score** and **lowest RMSE**
-- **Linear Regression** performed worst due to lack of regularization
-- **Lasso** and **ElasticNet** produced competitive results but slightly underperformed Ridge
+| Adım | Yöntem | Açıklama |
+|------|--------|----------|
+| **Eksik Değer (Kategorik)** | `"None"` ile doldurma | Eksik kategorik değişkenler |
+| **Eksik Değer (Yapısal)** | `0` ile doldurma | Garaj/bodrum gibi yapısal boşluklar |
+| **Eksik Değer (Sayısal)** | Medyan ile doldurma | Kalan sayısal eksiklikler |
+| **Encoding** | `get_dummies` (One-Hot) | Tüm kategorik değişkenler |
+| **Ölçeklendirme** | StandardScaler | Yalnızca sayısal değişkenler (dummy değişkenler ölçeklenmedi) |
+| **Split** | Train/Test Split | Model öncesi ayrıştırma |
 
-<p align="center">
-  <img src="r2_score.png" width="45%">
-  <img src="rmse.png" width="45%">
-</p>
+### 2️⃣ Modeller ve Hiperparametre Optimizasyonu
 
----
+| Model | Regularizasyon | GridSearchCV |
+|-------|---------------|--------------|
+| **Linear Regression** | ❌ Yok | — |
+| **Ridge** | ✅ L2 | `alpha` parametre taraması |
+| **Lasso** | ✅ L1 | `alpha` parametre taraması |
+| **ElasticNet** | ✅ L1 + L2 | `alpha`, `l1_ratio` parametre taraması |
 
-## Conclusion
-Ridge Regression proved to be the most suitable model for the Ames Housing dataset.
-Its L2 regularization effectively handled multicollinearity and high dimensionality
-by shrinking coefficients in a balanced manner, leading to improved generalization
-performance compared to Linear Regression.
-
-This study demonstrates the importance of regularization when working with
-complex, feature-rich datasets.
+Tüm modeller **GridSearchCV + Cross-Validation** ile optimize edilmiştir.
 
 ---
 
-## Key Takeaways
-- Regularization significantly improves regression performance
-- Ridge Regression is particularly effective in multicollinear settings
-- Feature scaling is critical for Lasso and ElasticNet models
-- Proper handling of missing values and categorical variables is essential
+## 📈 Sonuçlar
+
+| Model | R² Score | MSE | RMSE |
+|-------|----------|-----|------|
+| ❌ Linear Regression | En düşük | En yüksek | En yüksek |
+| ✅ **Ridge** | **En yüksek** | **En düşük** | **En düşük** |
+| 🔶 Lasso | Rekabetçi | Rekabetçi | Rekabetçi |
+| 🔷 ElasticNet | Rekabetçi | Rekabetçi | Rekabetçi |
+
+**Ridge Regression**, L2 regularizasyonu sayesinde çoklu doğrusal bağlantıyı etkili şekilde yönetmiş ve en başarılı genelleme performansını göstermiştir.
+
+### Görseller
+
+![R² Score](r2_score.png)
+![MSE](mse.png)
+![RMSE](rmse.png)
 
 ---
 
-## Technologies Used
-- Python
-- Pandas, NumPy
-- Scikit-learn
-- Matplotlib
+## 💡 Ana Çıkarımlar
 
+- ✅ Regularizasyon, regresyon performansını önemli ölçüde iyileştirir
+- ✅ Ridge, multicollinear ortamlarda özellikle etkilidir
+- ✅ Lasso ve ElasticNet için feature scaling kritiktir
+- ✅ Eksik veri ve kategorik değişken yönetimi doğru yapılmalıdır
 
+---
 
+## ⚙️ Kullanım
 
+```bash
+# 1. Depoyu klonla
+git clone https://github.com/ferhattkoc-ml/ames-housing-regression-comparison.git
+cd ames-housing-regression-comparison
 
+# 2. Sanal ortam oluştur (opsiyonel)
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
 
+# 3. Bağımlılıkları yükle
+pip install -r requirements.txt
 
+# 4. Notebook'u aç
+jupyter notebook
+```
 
+> **Not:** `AmesHousing.csv` dosyasını [Kaggle](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques) üzerinden indirip proje kök dizinine koyun.
 
+---
 
+## 🛠️ Tech Stack
 
+| Kategori | Teknolojiler |
+|----------|-------------|
+| **Dil** | Python 3.8+ |
+| **Veri İşleme** | Pandas, NumPy |
+| **Makine Öğrenmesi** | scikit-learn (LinearRegression, Ridge, Lasso, ElasticNet, GridSearchCV, StandardScaler) |
+| **Görselleştirme** | Matplotlib |
+| **Ortam** | Jupyter Notebook |
+
+---
+
+## 📂 Proje Yapısı
+
+```
+ames-housing-regression-comparison/
+├── ames-housing-regression-comparison.ipynb   # Ana notebook
+├── AmesHousing.csv                            # Veri seti (Kaggle)
+├── r2_score.png                               # R² karşılaştırma görseli
+├── mse.png                                    # MSE karşılaştırma görseli
+├── rmse.png                                   # RMSE karşılaştırma görseli
+├── requirements.txt                           # Bağımlılıklar
+└── README.md                                  # Bu dosya
+```
+
+---
+
+## 👤 Yazar
+
+**Ferhat Koç** · [GitHub](https://github.com/ferhattkoc-ml) · [LinkedIn](https://linkedin.com/in/ferhattkocc/)
+
+> ⭐ Bu projeyi beğendiyseniz bir yıldız bırakmayı unutmayın!
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by Ferhat Koç</sub>
+</div>
